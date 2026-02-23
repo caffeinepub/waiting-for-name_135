@@ -1,12 +1,10 @@
 import { useState, FormEvent } from "react";
 import { ParticleCanvas } from "./components/ParticleCanvas";
-import { useScrollReveal } from "./hooks/useScrollReveal";
 import { useSubmitReview } from "./hooks/useQueries";
 import { ExamTarget } from "./backend.d";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AnimatedGradientCard } from "@/components/ui/animated-gradient-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,6 +12,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { AnimatedText } from "@/components/ui/animated-shiny-text";
 import TextBlockAnimation from "@/components/ui/text-block-animation";
+import { HighlightCard } from "@/components/ui/highlight-card";
+import { HoverTextGlow } from "@/components/ui/hover-text-glow";
+import { ScrollReveal, ScrollRevealStagger, ScrollRevealStaggerItem } from "@/components/ScrollReveal";
 import { Toaster, toast } from "sonner";
 import {
   Focus,
@@ -22,6 +23,7 @@ import {
   Users,
   MousePointer2,
   Menu,
+  X,
   CheckCircle2,
   Sparkles,
   Brain,
@@ -30,61 +32,86 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-// Reusable reveal section wrapper
-function RevealSection({ 
-  children, 
-  className = "", 
-  id 
-}: { 
-  children: React.ReactNode; 
-  className?: string;
-  id?: string;
-}) {
-  const { ref, isVisible } = useScrollReveal({ threshold: 0.15 });
-
-  return (
-    <section
-      id={id}
-      ref={ref as React.RefObject<HTMLElement>}
-      className={`${className} ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
-    >
-      {children}
-    </section>
-  );
-}
-
 // Navigation
 function Navigation() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleLinkClick = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-background/50 backdrop-blur-md border-b border-white/5">
-      <div className="max-w-7xl mx-auto flex justify-between items-center p-4 md:p-6">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
-            <span className="font-bold text-accent-foreground text-lg">F</span>
+    <>
+      <nav className="fixed top-0 left-0 w-full z-50 bg-background/50 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-7xl mx-auto flex justify-between items-center p-2 md:p-3">
+          <div className="flex items-center h-16 w-72">
+            <HoverTextGlow text="OATH" duration={0.3} />
           </div>
-          <span className="text-card-foreground font-semibold tracking-wide text-xl hidden sm:inline">Focus</span>
-        </div>
 
-        <div className="hidden md:flex space-x-8 text-sm font-medium text-muted-foreground">
-          <a href="#problem" className="hover:text-foreground transition-colors">
-            Problem
-          </a>
-          <a href="#solution" className="hover:text-foreground transition-colors">
-            Solution
-          </a>
-          <a href="#vision" className="hover:text-foreground transition-colors">
-            Vision
-          </a>
-          <a href="#feedback" className="hover:text-foreground transition-colors">
-            Feedback
-          </a>
-        </div>
+          <div className="hidden md:flex space-x-8 text-sm font-medium text-muted-foreground">
+            <a href="#problem" className="hover:text-foreground transition-colors">
+              Problem
+            </a>
+            <a href="#solution" className="hover:text-foreground transition-colors">
+              Solution
+            </a>
+            <a href="#vision" className="hover:text-foreground transition-colors">
+              Vision
+            </a>
+            <a href="#feedback" className="hover:text-foreground transition-colors">
+              Feedback
+            </a>
+          </div>
 
-        <button className="text-muted-foreground hover:text-foreground transition-colors md:hidden">
-          <Menu size={24} />
-        </button>
-      </div>
-    </nav>
+          <button 
+            className="text-muted-foreground hover:text-foreground transition-colors md:hidden z-50"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle mobile menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-background/95 backdrop-blur-lg z-40 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          <div className="flex flex-col items-center justify-center h-full space-y-8 text-center px-6">
+            <a 
+              href="#problem" 
+              className="text-2xl font-semibold text-foreground hover:text-accent transition-colors"
+              onClick={handleLinkClick}
+            >
+              Problem
+            </a>
+            <a 
+              href="#solution" 
+              className="text-2xl font-semibold text-foreground hover:text-accent transition-colors"
+              onClick={handleLinkClick}
+            >
+              Solution
+            </a>
+            <a 
+              href="#vision" 
+              className="text-2xl font-semibold text-foreground hover:text-accent transition-colors"
+              onClick={handleLinkClick}
+            >
+              Vision
+            </a>
+            <a 
+              href="#feedback" 
+              className="text-2xl font-semibold text-foreground hover:text-accent transition-colors"
+              onClick={handleLinkClick}
+            >
+              Feedback
+            </a>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -152,10 +179,10 @@ function HeroSection() {
 // Problem Section
 function ProblemSection() {
   return (
-    <RevealSection id="problem" className="relative py-40 px-4 section-gradient-premium">
+    <section id="problem" className="relative py-40 px-4 bg-gradient-to-b from-background to-secondary/30">
       <BackgroundBeams />
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-20">
+        <ScrollReveal className="text-center mb-20">
           <AnimatedText 
             text="Distraction Is Not a Motivation Problem."
             gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
@@ -174,187 +201,207 @@ function ProblemSection() {
             Every year, lakhs of JEE & NEET aspirants start their preparation with determination. But within weeks, the
             result is lost time, broken consistency, and mental burnout.
           </p>
-        </div>
+        </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <AnimatedGradientCard variant="premium" glowIntensity="medium">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold gradient-heading flex items-start gap-3">
-                <span className="text-3xl">🌐</span>
-                <div>
-                  ONLINE DISTRACTIONS
-                  <p className="text-sm font-normal text-muted-foreground mt-1">(Digital Overload Zone)</p>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-foreground/90 italic">
-                "I'll just watch YouTube for 10 minutes and then study."
-              </p>
-              <ul className="space-y-3 text-foreground/70">
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive mt-1">•</span>
-                  Endless Instagram Reels
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive mt-1">•</span>
-                  "Just one more game"
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive mt-1">•</span>
-                  Web series binge sessions
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive mt-1">•</span>
-                  Random chatting
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive mt-1">•</span>
-                  Non-educational YouTube rabbit holes
-                </li>
-              </ul>
-              <p className="text-foreground font-medium pt-2">
-                10 minutes quietly turn into 2 hours. Not because you are weak. But because these platforms are
-                designed to capture and retain your attention.
-              </p>
-            </CardContent>
-          </AnimatedGradientCard>
+        <ScrollRevealStagger className="grid md:grid-cols-2 gap-8 mb-16">
+          <ScrollRevealStaggerItem>
+            <HighlightCard>
+              <Card className="bg-card/80 border-white/5 backdrop-blur-sm hover:border-white/10 transition-all">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold gradient-heading flex items-start gap-3">
+                    <span className="text-3xl">🌐</span>
+                    <div>
+                      ONLINE DISTRACTIONS
+                      <p className="text-sm font-normal text-muted-foreground mt-1">(Digital Overload Zone)</p>
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-foreground/90 italic">
+                    "I'll just watch YouTube for 10 minutes and then study."
+                  </p>
+                  <ul className="space-y-3 text-foreground/70">
+                    <li className="flex items-start gap-2">
+                      <span className="text-destructive mt-1">•</span>
+                      Endless Instagram Reels
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-destructive mt-1">•</span>
+                      "Just one more game"
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-destructive mt-1">•</span>
+                      Web series binge sessions
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-destructive mt-1">•</span>
+                      Random chatting
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-destructive mt-1">•</span>
+                      Non-educational YouTube rabbit holes
+                    </li>
+                  </ul>
+                  <p className="text-foreground font-medium pt-2">
+                    10 minutes quietly turn into 2 hours. Not because you are weak. But because these platforms are
+                    designed to capture and retain your attention.
+                  </p>
+                </CardContent>
+              </Card>
+            </HighlightCard>
+          </ScrollRevealStaggerItem>
 
-          <AnimatedGradientCard variant="premium" glowIntensity="medium">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold gradient-heading flex items-start gap-3">
-                <span className="text-3xl">🏫</span>
-                <div>
-                  OFFLINE DISTRACTIONS
-                  <p className="text-sm font-normal text-muted-foreground mt-1">(Real-World Focus Killers)</p>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-foreground/90 italic">
-                "Even if you delete social media…"
-              </p>
-              <ul className="space-y-3 text-foreground/70">
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive mt-1">•</span>
-                  Skipping coaching classes
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive mt-1">•</span>
-                  Irregular sleep cycles
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive mt-1">•</span>
-                  Emotional ups and downs in relationships
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive mt-1">•</span>
-                  Casual timepass with friends
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive mt-1">•</span>
-                  No structured daily accountability
-                </li>
-              </ul>
-              <p className="text-foreground font-medium pt-2">
-                Offline chaos silently destroys long-term consistency.
-              </p>
-            </CardContent>
-          </AnimatedGradientCard>
-        </div>
+          <ScrollRevealStaggerItem>
+            <HighlightCard>
+              <Card className="bg-card/80 border-white/5 backdrop-blur-sm hover:border-white/10 transition-all">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold gradient-heading flex items-start gap-3">
+                    <span className="text-3xl">🏫</span>
+                    <div>
+                      OFFLINE DISTRACTIONS
+                      <p className="text-sm font-normal text-muted-foreground mt-1">(Real-World Focus Killers)</p>
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-foreground/90 italic">
+                    "Even if you delete social media…"
+                  </p>
+                  <ul className="space-y-3 text-foreground/70">
+                    <li className="flex items-start gap-2">
+                      <span className="text-destructive mt-1">•</span>
+                      Skipping coaching classes
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-destructive mt-1">•</span>
+                      Irregular sleep cycles
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-destructive mt-1">•</span>
+                      Emotional ups and downs in relationships
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-destructive mt-1">•</span>
+                      Casual timepass with friends
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-destructive mt-1">•</span>
+                      No structured daily accountability
+                    </li>
+                  </ul>
+                  <p className="text-foreground font-medium pt-2">
+                    Offline chaos silently destroys long-term consistency.
+                  </p>
+                </CardContent>
+              </Card>
+            </HighlightCard>
+          </ScrollRevealStaggerItem>
+        </ScrollRevealStagger>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <AnimatedGradientCard variant="accent" glowIntensity="high">
-            <CardHeader>
-              <CardTitle className="text-xl font-bold gradient-heading flex items-start gap-3">
-                <span className="text-2xl">⚠️</span>
-                The Real Issue
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-foreground/90 mb-4">Students don't lack ambition. They lack:</p>
-              <ul className="space-y-2 text-foreground/70 mb-4">
-                <li>• Focus protection</li>
-                <li>• Structured monitoring</li>
-                <li>• Accountability</li>
-                <li>• Performance visibility</li>
-              </ul>
-              <p className="gradient-heading-light font-semibold text-lg">
-                Motivation fades. Structure sustains.
-              </p>
-            </CardContent>
-          </AnimatedGradientCard>
+        <ScrollRevealStagger className="grid md:grid-cols-2 gap-8">
+          <ScrollRevealStaggerItem>
+            <HighlightCard>
+              <Card className="bg-destructive/10 border-destructive/30 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="text-xl font-bold gradient-heading flex items-start gap-3">
+                    <span className="text-2xl">⚠️</span>
+                    The Real Issue
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-foreground/90 mb-4">Students don't lack ambition. They lack:</p>
+                  <ul className="space-y-2 text-foreground/70 mb-4">
+                    <li>• Focus protection</li>
+                    <li>• Structured monitoring</li>
+                    <li>• Accountability</li>
+                    <li>• Performance visibility</li>
+                  </ul>
+                  <p className="gradient-heading-light font-semibold text-lg">
+                    Motivation fades. Structure sustains.
+                  </p>
+                </CardContent>
+              </Card>
+            </HighlightCard>
+          </ScrollRevealStaggerItem>
 
-          <AnimatedGradientCard variant="default" glowIntensity="medium">
-            <CardHeader>
-              <CardTitle className="text-xl font-bold gradient-heading flex items-start gap-3">
-                <span className="text-2xl">💡</span>
-                Why Current Solutions Fail
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-foreground/90 mb-4">Most productivity apps:</p>
-              <ul className="space-y-2 text-foreground/70">
-                <li>• Are generic study timers</li>
-                <li>• Don't understand competitive exam pressure</li>
-                <li>• Ignore psychological triggers</li>
-                <li>• Don't address real-world distractions</li>
-              </ul>
-              <p className="text-foreground font-medium pt-4">
-                Competitive exam preparation requires a system built specifically for aspirants.
-              </p>
-            </CardContent>
-          </AnimatedGradientCard>
-        </div>
+          <ScrollRevealStaggerItem>
+            <HighlightCard>
+              <Card className="bg-card/80 border-white/5 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="text-xl font-bold gradient-heading flex items-start gap-3">
+                    <span className="text-2xl">💡</span>
+                    Why Current Solutions Fail
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-foreground/90 mb-4">Most productivity apps:</p>
+                  <ul className="space-y-2 text-foreground/70">
+                    <li>• Are generic study timers</li>
+                    <li>• Don't understand competitive exam pressure</li>
+                    <li>• Ignore psychological triggers</li>
+                    <li>• Don't address real-world distractions</li>
+                  </ul>
+                  <p className="text-foreground font-medium pt-4">
+                    Competitive exam preparation requires a system built specifically for aspirants.
+                  </p>
+                </CardContent>
+              </Card>
+            </HighlightCard>
+          </ScrollRevealStaggerItem>
+        </ScrollRevealStagger>
       </div>
-    </RevealSection>
+    </section>
   );
 }
 
 // Why This Platform Exists Section
 function WhySection() {
   return (
-    <RevealSection className="relative py-40 px-4 section-gradient-accent">
+    <section className="relative py-40 px-4 bg-gradient-to-b from-secondary/30 to-background">
       <BackgroundBeams />
       <div className="max-w-4xl mx-auto text-center relative z-10">
-        <AnimatedText 
-          text="Why This Platform Exists"
-          gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
-          gradientAnimationDuration={5}
-          hoverEffect={true}
-          textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-12"
-        />
-
-        <div className="space-y-8 text-left text-foreground/80 text-lg md:text-xl leading-relaxed">
-          <p>
-            We noticed something simple:
-          </p>
+        <ScrollReveal>
           <AnimatedText 
-            text="Students don't fail because they don't want success. They fail because they don't have a system strong enough to protect their focus."
-            gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
-            gradientAnimationDuration={4}
+            text="Why This Platform Exists"
+            gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
+            gradientAnimationDuration={5}
             hoverEffect={true}
-            className="py-6"
-            textClassName="text-xl md:text-2xl font-semibold text-left"
+            textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-12"
           />
-          <p>
-            This platform is built to create that system.
-          </p>
-          <div className="text-center py-8">
-            <p className="text-muted-foreground">Not a motivational app.</p>
-            <p className="text-muted-foreground">Not just a timer.</p>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.2}>
+          <div className="space-y-8 text-left text-foreground/80 text-lg md:text-xl leading-relaxed">
+            <p>
+              We noticed something simple:
+            </p>
             <AnimatedText 
-              text="A behavioral control + performance tracking ecosystem designed for serious aspirants."
-              gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #22d3ee, #F8FAFC, #9CA3AF)"
-              gradientAnimationDuration={3}
+              text="Students don't fail because they don't want success. They fail because they don't have a system strong enough to protect their focus."
+              gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
+              gradientAnimationDuration={4}
               hoverEffect={true}
-              className="mt-6"
-              textClassName="text-xl md:text-2xl font-bold text-center"
+              className="py-6"
+              textClassName="text-xl md:text-2xl font-semibold text-left"
             />
+            <p>
+              This platform is built to create that system.
+            </p>
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">Not a motivational app.</p>
+              <p className="text-muted-foreground">Not just a timer.</p>
+              <AnimatedText 
+                text="A behavioral control + performance tracking ecosystem designed for serious aspirants."
+                gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #22d3ee, #F8FAFC, #9CA3AF)"
+                gradientAnimationDuration={3}
+                hoverEffect={true}
+                className="mt-6"
+                textClassName="text-xl md:text-2xl font-bold text-center"
+              />
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
-    </RevealSection>
+    </section>
   );
 }
 
@@ -396,10 +443,10 @@ function SolutionSection() {
   ];
 
   return (
-    <RevealSection id="solution" className="relative py-40 px-4 section-gradient-default">
+    <section id="solution" className="relative py-40 px-4 bg-background">
       <BackgroundBeams />
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-20">
+        <ScrollReveal className="text-center mb-20">
           <AnimatedText 
             text="How We Solve It"
             gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
@@ -407,45 +454,44 @@ function SolutionSection() {
             hoverEffect={true}
             textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-6"
           />
-        </div>
+        </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <ScrollRevealStagger className="grid md:grid-cols-2 gap-8">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <AnimatedGradientCard
-                key={index}
-                variant="premium"
-                glowIntensity="high"
-                hoverEffect={true}
-              >
-                <CardHeader>
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-gradient-to-br from-cyan-500/20 via-blue-500/15 to-cyan-500/10 rounded-xl group-hover:from-cyan-500/30 group-hover:via-blue-500/25 group-hover:to-cyan-500/20 transition-all duration-500">
-                      <Icon className="w-8 h-8 text-cyan-400" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-2xl font-bold gradient-heading mb-2">{feature.title}</CardTitle>
-                      <CardDescription className="text-muted-foreground text-base">{feature.description}</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {feature.bullets.map((bullet, i) => (
-                      <li key={i} className="flex items-start gap-2 text-foreground/70">
-                        <CheckCircle2 className="w-5 h-5 text-cyan-400 mt-0.5 shrink-0" />
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </AnimatedGradientCard>
+              <ScrollRevealStaggerItem key={index}>
+                <HighlightCard>
+                  <Card className="bg-card/80 border-white/5 backdrop-blur-sm hover:border-white/20 hover:bg-card/90 transition-all">
+                    <CardHeader>
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 bg-accent/20 rounded-xl hover:bg-accent/30 transition-colors">
+                          <Icon className="w-8 h-8 text-accent" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-2xl font-bold gradient-heading mb-2">{feature.title}</CardTitle>
+                          <CardDescription className="text-muted-foreground text-base">{feature.description}</CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2">
+                        {feature.bullets.map((bullet, i) => (
+                          <li key={i} className="flex items-start gap-2 text-foreground/70">
+                            <CheckCircle2 className="w-5 h-5 text-accent mt-0.5 shrink-0" />
+                            {bullet}
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </HighlightCard>
+              </ScrollRevealStaggerItem>
             );
           })}
-        </div>
+        </ScrollRevealStagger>
       </div>
-    </RevealSection>
+    </section>
   );
 }
 
@@ -461,10 +507,10 @@ function FutureVisionSection() {
   ];
 
   return (
-    <RevealSection id="vision" className="relative py-40 px-4 section-gradient-premium">
+    <section id="vision" className="relative py-40 px-4 bg-gradient-to-b from-background to-secondary/30">
       <BackgroundBeams />
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-20">
+        <ScrollReveal className="text-center mb-20">
           <AnimatedText 
             text="Future Vision"
             gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #22d3ee, #F8FAFC, #9CA3AF)"
@@ -475,26 +521,25 @@ function FutureVisionSection() {
           <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto">
             This is not just an app. It's the foundation of a focused preparation ecosystem.
           </p>
-        </div>
+        </ScrollReveal>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <ScrollRevealStagger className="grid md:grid-cols-3 gap-8 mb-16">
           {futureFeatures.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <AnimatedGradientCard
-                key={index}
-                variant="accent"
-                glowIntensity="medium"
-                className="text-center p-8"
-              >
-                <Icon className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <p className="text-foreground/90 font-medium">{feature.text}</p>
-              </AnimatedGradientCard>
+              <ScrollRevealStaggerItem key={index}>
+                <HighlightCard>
+                  <Card className="bg-card/80 border-white/5 backdrop-blur-sm hover:border-white/20 transition-all text-center p-8">
+                    <Icon className="w-12 h-12 text-accent mx-auto mb-4" />
+                    <p className="text-foreground/90 font-medium">{feature.text}</p>
+                  </Card>
+                </HighlightCard>
+              </ScrollRevealStaggerItem>
             );
           })}
-        </div>
+        </ScrollRevealStagger>
 
-        <div className="text-center">
+        <ScrollReveal delay={0.3} className="text-center">
           <AnimatedText 
             text="We aim to build the most serious productivity platform for competitive exam aspirants in India."
             gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
@@ -502,101 +547,129 @@ function FutureVisionSection() {
             hoverEffect={true}
             textClassName="text-xl md:text-2xl font-bold text-center"
           />
-        </div>
+        </ScrollReveal>
       </div>
-    </RevealSection>
+    </section>
   );
 }
 
 // Who Is This For Section
 function WhoIsThisForSection() {
   return (
-    <RevealSection className="relative py-40 px-4 section-gradient-accent">
+    <section className="relative py-40 px-4 bg-gradient-to-b from-secondary/30 to-background">
       <BackgroundBeams />
       <div className="max-w-4xl mx-auto relative z-10">
-        <AnimatedText 
-          text="Who Is This For?"
-          gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
-          gradientAnimationDuration={5}
-          hoverEffect={true}
-          className="mb-16"
-          textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display text-center"
-        />
+        <ScrollReveal>
+          <AnimatedText 
+            text="Who Is This For?"
+            gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
+            gradientAnimationDuration={5}
+            hoverEffect={true}
+            className="mb-16"
+            textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display text-center"
+          />
+        </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-16">
-          <AnimatedGradientCard variant="accent" glowIntensity="medium" className="p-8">
-            <CheckCircle2 className="w-8 h-8 text-cyan-400 mb-4" />
-            <p className="text-foreground text-xl font-semibold">JEE Aspirants</p>
-          </AnimatedGradientCard>
-          <AnimatedGradientCard variant="accent" glowIntensity="medium" className="p-8">
-            <CheckCircle2 className="w-8 h-8 text-cyan-400 mb-4" />
-            <p className="text-foreground text-xl font-semibold">NEET Aspirants</p>
-          </AnimatedGradientCard>
-          <AnimatedGradientCard variant="accent" glowIntensity="medium" className="p-8">
-            <CheckCircle2 className="w-8 h-8 text-cyan-400 mb-4" />
-            <p className="text-foreground text-xl font-semibold">Students struggling with consistency</p>
-          </AnimatedGradientCard>
-          <AnimatedGradientCard variant="accent" glowIntensity="medium" className="p-8">
-            <CheckCircle2 className="w-8 h-8 text-cyan-400 mb-4" />
-            <p className="text-foreground text-xl font-semibold">Serious competitors preparing for 1–2 year cycles</p>
-          </AnimatedGradientCard>
-        </div>
+        <ScrollRevealStagger className="grid md:grid-cols-2 gap-6 mb-16">
+          <ScrollRevealStaggerItem>
+            <HighlightCard>
+              <Card className="bg-card/80 border-accent/20 backdrop-blur-sm hover:border-accent/40 transition-all p-8">
+                <CheckCircle2 className="w-8 h-8 text-accent mb-4" />
+                <p className="text-foreground text-xl font-semibold">JEE Aspirants</p>
+              </Card>
+            </HighlightCard>
+          </ScrollRevealStaggerItem>
+          <ScrollRevealStaggerItem>
+            <HighlightCard>
+              <Card className="bg-card/80 border-accent/20 backdrop-blur-sm hover:border-accent/40 transition-all p-8">
+                <CheckCircle2 className="w-8 h-8 text-accent mb-4" />
+                <p className="text-foreground text-xl font-semibold">NEET Aspirants</p>
+              </Card>
+            </HighlightCard>
+          </ScrollRevealStaggerItem>
+          <ScrollRevealStaggerItem>
+            <HighlightCard>
+              <Card className="bg-card/80 border-accent/20 backdrop-blur-sm hover:border-accent/40 transition-all p-8">
+                <CheckCircle2 className="w-8 h-8 text-accent mb-4" />
+                <p className="text-foreground text-xl font-semibold">Students struggling with consistency</p>
+              </Card>
+            </HighlightCard>
+          </ScrollRevealStaggerItem>
+          <ScrollRevealStaggerItem>
+            <HighlightCard>
+              <Card className="bg-card/80 border-accent/20 backdrop-blur-sm hover:border-accent/40 transition-all p-8">
+                <CheckCircle2 className="w-8 h-8 text-accent mb-4" />
+                <p className="text-foreground text-xl font-semibold">Serious competitors preparing for 1–2 year cycles</p>
+              </Card>
+            </HighlightCard>
+          </ScrollRevealStaggerItem>
+        </ScrollRevealStagger>
 
-        <div className="text-center bg-destructive/10 border border-destructive/30 rounded-xl p-10">
-          <p className="text-foreground text-xl md:text-2xl font-bold">
-            If you're not serious about your preparation,
-            <br />
-            <span className="text-destructive">this platform is not for you.</span>
-          </p>
-        </div>
+        <ScrollReveal delay={0.3}>
+          <div className="text-center bg-destructive/10 border border-destructive/30 rounded-xl p-10">
+            <p className="text-foreground text-xl md:text-2xl font-bold">
+              If you're not serious about your preparation,
+              <br />
+              <span className="text-destructive">this platform is not for you.</span>
+            </p>
+          </div>
+        </ScrollReveal>
       </div>
-    </RevealSection>
+    </section>
   );
 }
 
 // Early Access Section
 function EarlyAccessSection() {
   return (
-    <RevealSection className="relative py-40 px-4 section-gradient-default">
+    <section className="relative py-40 px-4 bg-background">
       <BackgroundBeams />
       <div className="max-w-4xl mx-auto text-center relative z-10">
-        <AnimatedText 
-          text="Early Access Community"
-          gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
-          gradientAnimationDuration={5}
-          hoverEffect={true}
-          textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-8"
-        />
-        <p className="text-muted-foreground text-lg md:text-xl mb-12">
-          We're currently building this with selected early users.
-        </p>
+        <ScrollReveal>
+          <AnimatedText 
+            text="Early Access Community"
+            gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
+            gradientAnimationDuration={5}
+            hoverEffect={true}
+            textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-8"
+          />
+          <p className="text-muted-foreground text-lg md:text-xl mb-12">
+            We're currently building this with selected early users.
+          </p>
+        </ScrollReveal>
 
-        <AnimatedGradientCard variant="premium" glowIntensity="high" className="rounded-xl p-10 mb-12">
-          <p className="text-foreground text-xl md:text-2xl mb-8">If you want to:</p>
-          <ul className="space-y-4 text-foreground/80 text-left max-w-md mx-auto text-lg">
-            <li className="flex items-start gap-3">
-              <CheckCircle2 className="w-6 h-6 text-cyan-400 mt-0.5 shrink-0" />
-              Test early features
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle2 className="w-6 h-6 text-cyan-400 mt-0.5 shrink-0" />
-              Give direct feedback
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle2 className="w-6 h-6 text-cyan-400 mt-0.5 shrink-0" />
-              Shape the future of this platform
-            </li>
-          </ul>
-        </AnimatedGradientCard>
+        <ScrollReveal delay={0.2}>
+          <HighlightCard>
+            <div className="bg-card/80 border border-white/5 rounded-xl p-10 mb-12">
+              <p className="text-foreground text-xl md:text-2xl mb-8">If you want to:</p>
+              <ul className="space-y-4 text-foreground/80 text-left max-w-md mx-auto text-lg">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-6 h-6 text-accent mt-0.5 shrink-0" />
+                  Test early features
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-6 h-6 text-accent mt-0.5 shrink-0" />
+                  Give direct feedback
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-6 h-6 text-accent mt-0.5 shrink-0" />
+                  Shape the future of this platform
+                </li>
+              </ul>
+            </div>
+          </HighlightCard>
+        </ScrollReveal>
 
-        <Button
-          size="lg"
-          className="px-12 py-7 bg-accent text-accent-foreground rounded-full font-bold tracking-wide hover:scale-110 hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all text-lg"
-        >
-          Join the Early Access List
-        </Button>
+        <ScrollReveal delay={0.4}>
+          <Button
+            size="lg"
+            className="px-12 py-7 bg-accent text-accent-foreground rounded-full font-bold tracking-wide hover:scale-110 hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all text-lg"
+          >
+            Join the Early Access List
+          </Button>
+        </ScrollReveal>
       </div>
-    </RevealSection>
+    </section>
   );
 }
 
@@ -653,10 +726,10 @@ function ReviewFormSection() {
   };
 
   return (
-    <RevealSection id="feedback" className="relative py-40 px-4 section-gradient-premium">
+    <section id="feedback" className="relative py-40 px-4 bg-gradient-to-b from-background to-secondary/30">
       <BackgroundBeams />
       <div className="max-w-3xl mx-auto relative z-10">
-        <div className="text-center mb-16">
+        <ScrollReveal className="text-center mb-16">
           <AnimatedText 
             text="Tell Us About Your Preparation Struggles"
             gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
@@ -668,140 +741,154 @@ function ReviewFormSection() {
           <p className="text-muted-foreground mt-3">
             👉 Your insight helps shape the system.
           </p>
-        </div>
+        </ScrollReveal>
 
-        <AnimatedGradientCard variant="premium" glowIntensity="medium">
-          <CardContent className="pt-8">
-            <form onSubmit={handleSubmit} className="space-y-8">
-              <div>
-                <Label htmlFor="name" className="text-foreground text-base mb-3 block">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-background/50 border-white/10 text-foreground focus:border-accent text-base"
-                  placeholder="Your name"
-                />
-              </div>
-
-              <div>
-                <Label className="text-foreground text-base mb-4 block">Exam Target</Label>
-                <RadioGroup
-                  value={formData.examTarget}
-                  onValueChange={(value: "jee" | "neet") => setFormData({ ...formData, examTarget: value })}
-                  className="flex gap-6"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="jee" id="jee" className="border-white/30 text-accent" />
-                    <Label htmlFor="jee" className="text-foreground cursor-pointer text-base">
-                      JEE
+        <ScrollReveal delay={0.2}>
+          <HighlightCard>
+            <Card className="bg-card/80 border-white/5 backdrop-blur-sm">
+              <CardContent className="pt-8">
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <div>
+                    <Label htmlFor="name" className="text-foreground text-base mb-3 block">
+                      Name
                     </Label>
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="bg-background/50 border-white/10 text-foreground focus:border-accent text-base"
+                      placeholder="Your name"
+                    />
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="neet" id="neet" className="border-white/30 text-accent" />
-                    <Label htmlFor="neet" className="text-foreground cursor-pointer text-base">
-                      NEET
+
+                  <div>
+                    <Label className="text-foreground text-base mb-4 block">Exam Target</Label>
+                    <RadioGroup
+                      value={formData.examTarget}
+                      onValueChange={(value: "jee" | "neet") => setFormData({ ...formData, examTarget: value })}
+                      className="flex gap-6"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="jee" id="jee" className="border-white/30 text-accent" />
+                        <Label htmlFor="jee" className="text-foreground cursor-pointer text-base">
+                          JEE
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="neet" id="neet" className="border-white/30 text-accent" />
+                        <Label htmlFor="neet" className="text-foreground cursor-pointer text-base">
+                          NEET
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="distraction" className="text-foreground text-base mb-3 block">
+                      Biggest Distraction
                     </Label>
+                    <Textarea
+                      id="distraction"
+                      value={formData.biggestDistraction}
+                      onChange={(e) => setFormData({ ...formData, biggestDistraction: e.target.value })}
+                      className="bg-background/50 border-white/10 text-foreground focus:border-accent min-h-[100px] text-base"
+                      placeholder="What distracts you the most during study time?"
+                    />
                   </div>
-                </RadioGroup>
-              </div>
 
-              <div>
-                <Label htmlFor="distraction" className="text-foreground text-base mb-3 block">
-                  Biggest Distraction
-                </Label>
-                <Textarea
-                  id="distraction"
-                  value={formData.biggestDistraction}
-                  onChange={(e) => setFormData({ ...formData, biggestDistraction: e.target.value })}
-                  className="bg-background/50 border-white/10 text-foreground focus:border-accent min-h-[100px] text-base"
-                  placeholder="What distracts you the most during study time?"
-                />
-              </div>
+                  <div>
+                    <Label htmlFor="studyHours" className="text-foreground text-base mb-3 block">
+                      Average Study Hours (per day)
+                    </Label>
+                    <Input
+                      id="studyHours"
+                      type="number"
+                      min="0"
+                      max="24"
+                      value={formData.averageStudyHours}
+                      onChange={(e) => setFormData({ ...formData, averageStudyHours: e.target.value })}
+                      className="bg-background/50 border-white/10 text-foreground focus:border-accent text-base"
+                      placeholder="e.g., 6"
+                    />
+                  </div>
 
-              <div>
-                <Label htmlFor="studyHours" className="text-foreground text-base mb-3 block">
-                  Average Study Hours (per day)
-                </Label>
-                <Input
-                  id="studyHours"
-                  type="number"
-                  min="0"
-                  max="24"
-                  value={formData.averageStudyHours}
-                  onChange={(e) => setFormData({ ...formData, averageStudyHours: e.target.value })}
-                  className="bg-background/50 border-white/10 text-foreground focus:border-accent text-base"
-                  placeholder="e.g., 6"
-                />
-              </div>
+                  <div>
+                    <Label htmlFor="neededFeature" className="text-foreground text-base mb-3 block">
+                      What Feature You Need Most
+                    </Label>
+                    <Textarea
+                      id="neededFeature"
+                      value={formData.neededFeature}
+                      onChange={(e) => setFormData({ ...formData, neededFeature: e.target.value })}
+                      className="bg-background/50 border-white/10 text-foreground focus:border-accent min-h-[100px] text-base"
+                      placeholder="What would help you stay focused the most?"
+                    />
+                  </div>
 
-              <div>
-                <Label htmlFor="neededFeature" className="text-foreground text-base mb-3 block">
-                  What Feature You Need Most
-                </Label>
-                <Textarea
-                  id="neededFeature"
-                  value={formData.neededFeature}
-                  onChange={(e) => setFormData({ ...formData, neededFeature: e.target.value })}
-                  className="bg-background/50 border-white/10 text-foreground focus:border-accent min-h-[100px] text-base"
-                  placeholder="What would help you stay focused the most?"
-                />
-              </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                disabled={isPending}
-                className="w-full py-7 bg-accent text-accent-foreground rounded-full font-bold tracking-wide hover:scale-105 hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all text-base"
-              >
-                {isPending ? "Submitting..." : "Submit & Join the Focus Movement"}
-              </Button>
-            </form>
-          </CardContent>
-        </AnimatedGradientCard>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    disabled={isPending}
+                    className="w-full py-7 bg-accent text-accent-foreground rounded-full font-bold tracking-wide hover:scale-105 hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all text-base"
+                  >
+                    {isPending ? "Submitting..." : "Submit & Join the Focus Movement"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </HighlightCard>
+        </ScrollReveal>
       </div>
-    </RevealSection>
+    </section>
   );
 }
 
 // Closing Section
 function ClosingSection() {
   return (
-    <RevealSection className="relative py-40 px-4 section-gradient-accent">
+    <section className="relative py-40 px-4 bg-gradient-to-b from-secondary/30 to-background">
       <BackgroundBeams />
       <div className="max-w-4xl mx-auto text-center relative z-10">
-        <div className="mb-16 space-y-6">
-          <p className="text-muted-foreground text-2xl md:text-3xl">Discipline is hard.</p>
-          <p className="text-muted-foreground text-2xl md:text-3xl">But chaos is harder.</p>
-        </div>
+        <ScrollReveal>
+          <div className="mb-16 space-y-6">
+            <p className="text-muted-foreground text-2xl md:text-3xl">Discipline is hard.</p>
+            <p className="text-muted-foreground text-2xl md:text-3xl">But chaos is harder.</p>
+          </div>
+        </ScrollReveal>
 
-        <p className="text-foreground text-2xl md:text-3xl font-semibold mb-10 leading-relaxed">
-          If you're serious about cracking JEE or NEET,
-          <br />
-          you need more than motivation.
-        </p>
+        <ScrollReveal delay={0.2}>
+          <p className="text-foreground text-2xl md:text-3xl font-semibold mb-10 leading-relaxed">
+            If you're serious about cracking JEE or NEET,
+            <br />
+            you need more than motivation.
+          </p>
+        </ScrollReveal>
 
-        <AnimatedText 
-          text="You need a system."
-          gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
-          gradientAnimationDuration={4}
-          hoverEffect={true}
-          className="mb-16"
-          textClassName="text-3xl md:text-5xl font-bold font-display text-center"
-        />
+        <ScrollReveal delay={0.3}>
+          <AnimatedText 
+            text="You need a system."
+            gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
+            gradientAnimationDuration={4}
+            hoverEffect={true}
+            className="mb-16"
+            textClassName="text-3xl md:text-5xl font-bold font-display text-center"
+          />
+        </ScrollReveal>
 
-        <p className="text-muted-foreground text-xl md:text-2xl mb-16">And we're building it.</p>
+        <ScrollReveal delay={0.4}>
+          <p className="text-muted-foreground text-xl md:text-2xl mb-16">And we're building it.</p>
+        </ScrollReveal>
 
-        <Button
-          size="lg"
-          className="px-12 py-7 bg-card-foreground text-background rounded-full font-bold tracking-wide hover:scale-110 hover:shadow-[0_0_30px_rgba(229,231,235,0.15)] transition-all text-lg"
-        >
-          Join Early Access
-        </Button>
+        <ScrollReveal delay={0.5}>
+          <Button
+            size="lg"
+            className="px-12 py-7 bg-card-foreground text-background rounded-full font-bold tracking-wide hover:scale-110 hover:shadow-[0_0_30px_rgba(229,231,235,0.15)] transition-all text-lg"
+          >
+            Join Early Access
+          </Button>
+        </ScrollReveal>
       </div>
-    </RevealSection>
+    </section>
   );
 }
 
