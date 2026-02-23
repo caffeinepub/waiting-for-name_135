@@ -14,6 +14,7 @@ import { AnimatedText } from "@/components/ui/animated-shiny-text";
 import TextBlockAnimation from "@/components/ui/text-block-animation";
 import { HighlightCard } from "@/components/ui/highlight-card";
 import { HoverTextGlow } from "@/components/ui/hover-text-glow";
+import { DrawLineText } from "@/components/ui/draw-line-text";
 import { ScrollReveal, ScrollRevealStagger, ScrollRevealStaggerItem } from "@/components/ScrollReveal";
 import { Toaster, toast } from "sonner";
 import {
@@ -123,7 +124,7 @@ function HeroSection() {
 
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none px-4">
         <div className="max-w-4xl w-full text-center space-y-8">
-          <div className="mb-4">
+          <div className="mb-8">
             <TextBlockAnimation
               blockColor="#22d3ee"
               animateOnScroll={false}
@@ -137,15 +138,76 @@ function HeroSection() {
             </TextBlockAnimation>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold gradient-heading tracking-tight font-display leading-tight">
-            Take The Oath,
-            <br />
-            <span className="gradient-heading-light">
-              Own Your Time
-            </span>
-          </h1>
+          <div className="flex flex-col items-center justify-center mb-8">
+            <DrawLineText
+              text="Take The Oath,"
+              fontSize={48}
+              strokeWidth={2}
+              color="#F8FAFC"
+              oneByOne={true}
+              afterFill={true}
+              letterSpacing={2}
+              wordSpacing={20}
+              className="font-black tracking-tight mb-4 md:hidden"
+            />
+            <DrawLineText
+              text="Take The Oath,"
+              fontSize={64}
+              strokeWidth={2}
+              color="#F8FAFC"
+              oneByOne={true}
+              afterFill={true}
+              letterSpacing={2}
+              wordSpacing={20}
+              className="font-black tracking-tight mb-4 hidden md:block lg:hidden"
+            />
+            <DrawLineText
+              text="Take The Oath,"
+              fontSize={80}
+              strokeWidth={2}
+              color="#F8FAFC"
+              oneByOne={true}
+              afterFill={true}
+              letterSpacing={3}
+              wordSpacing={24}
+              className="font-black tracking-tight mb-6 hidden lg:block"
+            />
+            <DrawLineText
+              text="Own Your Time"
+              fontSize={48}
+              strokeWidth={2}
+              color="#F8FAFC"
+              oneByOne={true}
+              afterFill={true}
+              letterSpacing={2}
+              wordSpacing={20}
+              className="font-black tracking-tight md:hidden"
+            />
+            <DrawLineText
+              text="Own Your Time"
+              fontSize={64}
+              strokeWidth={2}
+              color="#F8FAFC"
+              oneByOne={true}
+              afterFill={true}
+              letterSpacing={2}
+              wordSpacing={20}
+              className="font-black tracking-tight hidden md:block lg:hidden"
+            />
+            <DrawLineText
+              text="Own Your Time"
+              fontSize={80}
+              strokeWidth={2}
+              color="#F8FAFC"
+              oneByOne={true}
+              afterFill={true}
+              letterSpacing={3}
+              wordSpacing={24}
+              className="font-black tracking-tight hidden lg:block"
+            />
+          </div>
 
-          <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground font-light leading-relaxed">
+          <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground font-light leading-relaxed mt-8">
             A structured productivity platform built specifically for JEE & NEET aspirants who are serious about
             eliminating distraction and building measurable consistency.
           </p>
