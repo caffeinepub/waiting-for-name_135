@@ -16,6 +16,8 @@ import { HighlightCard } from "@/components/ui/highlight-card";
 import { HoverTextGlow } from "@/components/ui/hover-text-glow";
 import { DrawLineText } from "@/components/ui/draw-line-text";
 import LetterHoverEffect from "@/components/ui/scale-letter";
+import { SocialLinks } from "@/components/ui/social-links";
+import { BGPattern } from "@/components/ui/bg-pattern";
 import { ScrollReveal, ScrollRevealStagger, ScrollRevealStaggerItem } from "@/components/ScrollReveal";
 import { Toaster, toast } from "sonner";
 import {
@@ -964,6 +966,51 @@ function ClosingSection() {
   );
 }
 
+// Connect With Us Section
+function ConnectWithUsSection() {
+  const socials = [
+    {
+      name: "Instagram",
+      image: "https://link-hover-lndev.vercel.app/instagram.png",
+      url: "https://www.instagram.com/oath_ownyourtime/"
+    },
+    {
+      name: "Email",
+      image: "https://link-hover-lndev.vercel.app/tiktok.png",
+      url: "mailto:oathteam.app@gmail.com"
+    }
+  ];
+
+  return (
+    <section className="relative py-32 px-4 bg-background">
+      <BGPattern variant="dots" mask="fade-center" fill="#22d3ee20" size={24} />
+      <BackgroundBeams />
+      <div className="max-w-4xl mx-auto text-center relative z-10">
+        <ScrollReveal>
+          <AnimatedText 
+            text="Connect With Us"
+            gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
+            gradientAnimationDuration={5}
+            hoverEffect={true}
+            className="mb-12"
+            textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display text-center"
+          />
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.2}>
+          <p className="text-muted-foreground text-lg md:text-xl mb-12">
+            Have questions? Want to share feedback? Reach out to us.
+          </p>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.3}>
+          <SocialLinks socials={socials} className="justify-center" />
+        </ScrollReveal>
+      </div>
+    </section>
+  );
+}
+
 // Footer
 function Footer() {
   return (
@@ -1000,6 +1047,7 @@ export default function App() {
       <EarlyAccessSection />
       <ReviewFormSection />
       <ClosingSection />
+      <ConnectWithUsSection />
       <Footer />
     </div>
   );
