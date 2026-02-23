@@ -47,29 +47,26 @@ export default function LetterHoverEffect({ text, className = "" }: LetterHoverE
             `,
             filter: `brightness(${brightness})`,
             textShadow: distance <= 2
-                ? 'var(--th-shadow, 0 2px 6px rgba(0,0,0,0.15))'
-                : 'var(--th-shadow-light, 0 1px 2px rgba(0,0,0,0.08))',
+                ? '0 4px 12px rgba(255,255,255,0.3), 0 2px 6px rgba(34,211,238,0.2)'
+                : '0 2px 4px rgba(255,255,255,0.15)',
             transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
             zIndex: isHovered ? 10 : distance <= 2 ? 5 : 1,
-            color: 'var(--th-text, #fff)',
             marginRight: '0.05em',
         };
     };
 
     return (
         <div className={`select-none ${className}`}>
-            <span className="inline-flex">
+            <span className="inline-flex items-center">
                 {text.split('').map((letter, index) => (
                     <span
                         key={index}
-                        className="inline-block cursor-pointer relative"
+                        className="inline-block cursor-pointer relative text-white"
                         style={getLetterStyle(index)}
                         onMouseEnter={() => setHoveredIndex(index)}
                         onMouseLeave={() => setHoveredIndex(-1)}
                     >
-                        <span className="font-bold" style={{ color: 'var(--th-text, #fff)' }}>
-                            {letter === ' ' ? '\u00A0' : letter}
-                        </span>
+                        {letter === ' ' ? '\u00A0' : letter}
                     </span>
                 ))}
             </span>

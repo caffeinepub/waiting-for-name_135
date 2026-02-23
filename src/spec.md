@@ -1,76 +1,59 @@
-# OATH Landing Page - Navigation Logo Update
+# OATH Landing Page - Logo Visibility Fix
 
 ## Current State
 
-The navigation bar currently displays "OATH" using the `HoverTextGlow` component, which creates an SVG-based gradient effect following the cursor.
+The landing page has a navigation bar with:
+- `LetterHoverEffect` component already integrated at lines 51-59 in App.tsx
+- Component displays "OATH - Own Your Time" text
+- CSS variables for theme colors defined in index.css (lines 238-249)
+- Component accepts `text` and `className` props
+- Mobile and desktop responsive sizing configured
 
-The navigation is responsive with:
-- Desktop navigation showing full menu links
-- Mobile hamburger menu with overlay
-- Fixed positioning with backdrop blur
+**Problem**: Logo text is not visible on both desktop and mobile. Space exists in the navigation bar where the logo should be, but no text is rendering.
 
 ## Requested Changes (Diff)
 
 ### Add
-- New `LetterHoverEffect` component (`scale-letter.tsx`) with 3D letter-by-letter hover scaling effect
-- CSS theme variables for the letter hover effect (`--th-text`, `--th-shadow`, `--th-shadow-light`)
-- Responsive logo text showing "OATH - Own Your Time"
+- Nothing new to add - component already exists
 
 ### Modify
-- Navigation logo: Replace `HoverTextGlow` component with `LetterHoverEffect`
-- Logo text: Change from "OATH" to "OATH - Own Your Time"
-- Logo sizing: Implement responsive sizing (smaller on mobile, larger on desktop)
-- Logo container: Remove fixed width constraint to allow flexible sizing
+- Fix logo visibility in navigation by ensuring proper color contrast and CSS rendering
+- Verify z-index layering doesn't hide the text
+- Ensure CSS variables are properly applied
+- Test that the component renders correctly with the dark background (#0B0F19)
 
 ### Remove
-- Previous `HoverTextGlow` import (kept in codebase for potential future use)
-- Fixed width constraint on logo container (`w-72`)
+- Nothing to remove
 
 ## Implementation Plan
 
-1. **Create `scale-letter.tsx` component** ✅
-   - Extract and adapt the LetterHoverEffect component with proper TypeScript interfaces
-   - Configure for dark theme (white text with cyan shadows)
-   - Make text configurable via props
-   - Support custom className for responsive styling
+1. **Diagnose the visibility issue**:
+   - Check if CSS variables are being applied correctly
+   - Verify the component is actually rendering (inspect DOM)
+   - Check for z-index conflicts with other navigation elements
+   - Ensure the dark mode class is properly set on the root element
 
-2. **Update global CSS** ✅
-   - Add theme variables for the component's color system
-   - Ensure proper contrast for dark background
+2. **Fix the rendering**:
+   - Ensure `--th-text` CSS variable resolves to white (#fff) for dark theme
+   - Add explicit color fallback if needed
+   - Verify the navigation container doesn't have overflow issues
+   - Check that backdrop-blur or other effects aren't hiding the text
 
-3. **Update App.tsx navigation** ✅
-   - Import the new `LetterHoverEffect` component
-   - Replace logo implementation with two responsive instances:
-     - Mobile: `text-sm sm:text-base md:hidden` (small text, hidden on desktop)
-     - Desktop: `hidden md:block text-lg lg:text-xl` (larger text, hidden on mobile)
-   - Set text to "OATH - Own Your Time"
-   - Remove fixed width constraint from container
+3. **Responsive sizing verification**:
+   - Mobile: `text-sm sm:text-base` (lines 51-54)
+   - Desktop: `text-lg lg:text-xl` (lines 56-59)
+   - Ensure both variants render properly
 
-4. **Validation**
-   - Test build compilation
-   - Verify responsive behavior across breakpoints
-   - Check hover interactions work smoothly
-   - Ensure no layout shifts or overlaps with navigation links
+4. **Validation**:
+   - Run typecheck to ensure no TypeScript errors
+   - Run lint to check for code quality issues
+   - Run build to verify production bundle works
+   - Visually verify logo is visible on both mobile and desktop layouts
 
 ## UX Notes
 
-**Responsive Behavior:**
-- Mobile (< 768px): Smaller text size to fit constrained space, full logo text visible
-- Tablet/Desktop (≥ 768px): Larger, more prominent logo with clear hover effects
-
-**Interactive Behavior:**
-- Each letter scales and lifts on hover with 3D perspective
-- Neighboring letters (distance 1-2) also animate subtly for wave effect
-- Smooth easing with cubic-bezier timing for premium feel
-- Brightness increases on hovered letters for emphasis
-
-**Visual Consistency:**
-- Maintains the dark, cinematic aesthetic of the landing page
-- White text with subtle cyan shadows matches the existing accent color system
-- Bold font weight for strong brand presence
-- Letter spacing configured for readability
-
-**Performance:**
-- Hover effect uses CSS transforms (GPU-accelerated)
-- No heavy SVG operations or canvas rendering
-- Smooth 60fps animations via optimized transition properties
+- Logo should be clearly visible with high contrast against dark navy background
+- Interactive hover effect should work on desktop (3D letter scaling)
+- Text should be legible and not too small on mobile
+- Logo position: top-left in navigation bar with proper padding
+- Should work seamlessly with mobile menu toggle button on the right
