@@ -15,6 +15,7 @@ import TextBlockAnimation from "@/components/ui/text-block-animation";
 import { HighlightCard } from "@/components/ui/highlight-card";
 import { HoverTextGlow } from "@/components/ui/hover-text-glow";
 import { DrawLineText } from "@/components/ui/draw-line-text";
+import LetterHoverEffect from "@/components/ui/scale-letter";
 import { ScrollReveal, ScrollRevealStagger, ScrollRevealStaggerItem } from "@/components/ScrollReveal";
 import { Toaster, toast } from "sonner";
 import {
@@ -45,8 +46,17 @@ function Navigation() {
     <>
       <nav className="fixed top-0 left-0 w-full z-50 bg-background/50 backdrop-blur-md border-b border-white/5">
         <div className="max-w-7xl mx-auto flex justify-between items-center p-2 md:p-3">
-          <div className="flex items-center h-16 w-72">
-            <HoverTextGlow text="OATH" duration={0.3} />
+          <div className="flex items-center h-16">
+            {/* Mobile: smaller text */}
+            <LetterHoverEffect 
+              text="OATH - Own Your Time" 
+              className="text-sm sm:text-base md:hidden font-bold tracking-wide"
+            />
+            {/* Desktop: larger text */}
+            <LetterHoverEffect 
+              text="OATH - Own Your Time" 
+              className="hidden md:block text-lg lg:text-xl font-bold tracking-wide"
+            />
           </div>
 
           <div className="hidden md:flex space-x-8 text-sm font-medium text-muted-foreground">
@@ -140,7 +150,7 @@ function HeroSection() {
 
           <div className="flex flex-col items-center justify-center mb-8">
             <DrawLineText
-              text="Take The Oath,"
+              text="TAKE THE OATH,"
               fontSize={48}
               strokeWidth={2}
               color="#F8FAFC"
@@ -151,7 +161,7 @@ function HeroSection() {
               className="font-black tracking-tight mb-4 md:hidden"
             />
             <DrawLineText
-              text="Take The Oath,"
+              text="TAKE THE OATH,"
               fontSize={64}
               strokeWidth={2}
               color="#F8FAFC"
@@ -162,7 +172,7 @@ function HeroSection() {
               className="font-black tracking-tight mb-4 hidden md:block lg:hidden"
             />
             <DrawLineText
-              text="Take The Oath,"
+              text="TAKE THE OATH,"
               fontSize={80}
               strokeWidth={2}
               color="#F8FAFC"
@@ -173,7 +183,7 @@ function HeroSection() {
               className="font-black tracking-tight mb-6 hidden lg:block"
             />
             <DrawLineText
-              text="Own Your Time"
+              text="OWN YOUR TIME"
               fontSize={48}
               strokeWidth={2}
               color="#F8FAFC"
@@ -184,7 +194,7 @@ function HeroSection() {
               className="font-black tracking-tight md:hidden"
             />
             <DrawLineText
-              text="Own Your Time"
+              text="OWN YOUR TIME"
               fontSize={64}
               strokeWidth={2}
               color="#F8FAFC"
@@ -195,7 +205,7 @@ function HeroSection() {
               className="font-black tracking-tight hidden md:block lg:hidden"
             />
             <DrawLineText
-              text="Own Your Time"
+              text="OWN YOUR TIME"
               fontSize={80}
               strokeWidth={2}
               color="#F8FAFC"

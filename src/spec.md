@@ -1,66 +1,76 @@
-# Review Collection Landing Page
+# OATH Landing Page - Navigation Logo Update
 
 ## Current State
 
-The landing page exists with:
-- Interactive particle hero section with "Experimental Interaction" badge and "Zero Gravity" headline
-- "LAUNCHING SOON" text present but understated
-- Full content sections (Problem, Why We Exist, How We Solve It, etc.)
-- Review submission form
-- Responsive design with Tailwind CSS
+The navigation bar currently displays "OATH" using the `HoverTextGlow` component, which creates an SVG-based gradient effect following the cursor.
+
+The navigation is responsive with:
+- Desktop navigation showing full menu links
+- Mobile hamburger menu with overlay
+- Fixed positioning with backdrop blur
 
 ## Requested Changes (Diff)
 
 ### Add
-- Large, cinematic "LAUNCHING SOON" text treatment with 3D depth
-- Layered text-shadow for embossed 3D effect
-- Soft cyan (#22d3ee) glow effect
-- Smooth floating animation (slow vertical movement)
-- Pulsing glow animation
-- Fade-in animation on page load
-- Subtle animated gradient sweep across text
-- Slight perspective tilt for depth
+- New `LetterHoverEffect` component (`scale-letter.tsx`) with 3D letter-by-letter hover scaling effect
+- CSS theme variables for the letter hover effect (`--th-text`, `--th-shadow`, `--th-shadow-light`)
+- Responsive logo text showing "OATH - Own Your Time"
 
 ### Modify
-- Position "LAUNCHING SOON" above main headline
-- Increase text size significantly (hero-dominant scale)
-- Add wide letter-spacing (tracking)
-- Update visual hierarchy to make "LAUNCHING SOON" prominent but not overpowering
-- Ensure animations are slow, smooth, and professional (no jitter/blink)
+- Navigation logo: Replace `HoverTextGlow` component with `LetterHoverEffect`
+- Logo text: Change from "OATH" to "OATH - Own Your Time"
+- Logo sizing: Implement responsive sizing (smaller on mobile, larger on desktop)
+- Logo container: Remove fixed width constraint to allow flexible sizing
 
 ### Remove
-- Current minimal "Experimental Interaction" badge styling (if that's the launching soon element)
+- Previous `HoverTextGlow` import (kept in codebase for potential future use)
+- Fixed width constraint on logo container (`w-72`)
 
 ## Implementation Plan
 
-1. **Update Hero Content Component**
-   - Reposition "LAUNCHING SOON" above main headline
-   - Increase font size to 2xl-4xl range (responsive)
-   - Add uppercase transform and wide letter-spacing
+1. **Create `scale-letter.tsx` component** ✅
+   - Extract and adapt the LetterHoverEffect component with proper TypeScript interfaces
+   - Configure for dark theme (white text with cyan shadows)
+   - Make text configurable via props
+   - Support custom className for responsive styling
 
-2. **Add Custom CSS Animations**
-   - Create `@keyframes` for floating motion (translateY movement)
-   - Create `@keyframes` for pulsing glow (opacity/shadow intensity)
-   - Create `@keyframes` for gradient sweep effect
-   - Create `@keyframes` for fade-in entrance
+2. **Update global CSS** ✅
+   - Add theme variables for the component's color system
+   - Ensure proper contrast for dark background
 
-3. **Apply 3D Text Effects**
-   - Layer multiple text-shadows for 3D depth
-   - Add cyan glow using box-shadow/text-shadow
-   - Apply subtle perspective transform
-   - Use white base color with gradient overlay
+3. **Update App.tsx navigation** ✅
+   - Import the new `LetterHoverEffect` component
+   - Replace logo implementation with two responsive instances:
+     - Mobile: `text-sm sm:text-base md:hidden` (small text, hidden on desktop)
+     - Desktop: `hidden md:block text-lg lg:text-xl` (larger text, hidden on mobile)
+   - Set text to "OATH - Own Your Time"
+   - Remove fixed width constraint from container
 
-4. **Configure Animation Timing**
-   - Set slow durations (3-6s for float, 4-8s for glow)
-   - Use ease-in-out timing functions
-   - Infinite loops for continuous motion
-   - Single run for fade-in entrance
+4. **Validation**
+   - Test build compilation
+   - Verify responsive behavior across breakpoints
+   - Check hover interactions work smoothly
+   - Ensure no layout shifts or overlaps with navigation links
 
 ## UX Notes
 
-- The "LAUNCHING SOON" text should command attention immediately on page load
-- Animation should feel premium and controlled (luxury SaaS aesthetic)
-- Text should maintain readability despite effects
-- Visual hierarchy preserved: LAUNCHING SOON → Main Headline → Subheadline → CTA
-- Mobile responsive: effects scale down gracefully on smaller screens
-- Performance: CSS animations only (GPU-accelerated, no JS overhead)
+**Responsive Behavior:**
+- Mobile (< 768px): Smaller text size to fit constrained space, full logo text visible
+- Tablet/Desktop (≥ 768px): Larger, more prominent logo with clear hover effects
+
+**Interactive Behavior:**
+- Each letter scales and lifts on hover with 3D perspective
+- Neighboring letters (distance 1-2) also animate subtly for wave effect
+- Smooth easing with cubic-bezier timing for premium feel
+- Brightness increases on hovered letters for emphasis
+
+**Visual Consistency:**
+- Maintains the dark, cinematic aesthetic of the landing page
+- White text with subtle cyan shadows matches the existing accent color system
+- Bold font weight for strong brand presence
+- Letter spacing configured for readability
+
+**Performance:**
+- Hover effect uses CSS transforms (GPU-accelerated)
+- No heavy SVG operations or canvas rendering
+- Smooth 60fps animations via optimized transition properties

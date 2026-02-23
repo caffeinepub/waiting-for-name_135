@@ -59,17 +59,17 @@ export const DrawLineText = ({
             const tl = gsap.timeline();
             tl.to(textChildren, {
                 strokeDashoffset: 0,
-                duration: 2.5,
+                duration: 1.3,
                 ease: "linear",
-                stagger: oneByOne ? 0.8 : 0,
+                stagger: oneByOne ? 0.35 : 0,
             });
             if (afterFill) {
                 tl.to(textChildren, {
                     fillOpacity: 1,
-                    duration: 0.6,
+                    duration: 0.5,
                     ease: "power4.in",
                     stagger: {
-                        amount: 0.2,
+                        amount: 0.15,
                         from: "center",
                     },
                 });
