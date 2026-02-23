@@ -1,0 +1,241 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.75rem;
+    /* Light mode (if ever needed) */
+    --background: 0.98 0 0;
+    --foreground: 0.15 0 0;
+    --card: 1 0 0;
+    --card-foreground: 0.15 0 0;
+    --popover: 1 0 0;
+    --popover-foreground: 0.15 0 0;
+    --primary: 0.55 0.22 264;
+    --primary-foreground: 1 0 0;
+    --secondary: 0.25 0.05 264;
+    --secondary-foreground: 0.98 0 0;
+    --muted: 0.93 0 0;
+    --muted-foreground: 0.50 0 0;
+    --accent: 0.55 0.22 264;
+    --accent-foreground: 1 0 0;
+    --destructive: 0.60 0.25 20;
+    --destructive-foreground: 1 0 0;
+    --border: 0.85 0 0;
+    --input: 0.85 0 0;
+    --ring: 0.55 0.22 264;
+    --chart-1: 0.55 0.22 264;
+    --chart-2: 0.60 0.18 200;
+    --chart-3: 0.65 0.15 180;
+    --chart-4: 0.70 0.20 140;
+    --chart-5: 0.75 0.18 100;
+  }
+
+  .dark {
+    /* Pure black background with blue accents - futuristic theme */
+    --background: 0 0 0;
+    --foreground: 0.98 0 0;
+    --card: 0.08 0.02 264;
+    --card-foreground: 0.95 0 0;
+    --popover: 0.10 0.03 264;
+    --popover-foreground: 0.98 0 0;
+    /* Google Blue primary: #4285F4 in OKLCH ≈ L:0.61 C:0.19 H:264 */
+    --primary: 0.98 0 0;
+    --primary-foreground: 0 0 0;
+    --secondary: 0.15 0.04 264;
+    --secondary-foreground: 0.95 0 0;
+    --muted: 0.12 0.02 264;
+    --muted-foreground: 0.60 0 0;
+    --accent: 0.61 0.19 264;
+    --accent-foreground: 0 0 0;
+    --destructive: 0.60 0.25 20;
+    --destructive-foreground: 0.98 0 0;
+    --border: 0.20 0.05 264;
+    --input: 0.15 0.04 264;
+    --ring: 0.61 0.19 264;
+    --chart-1: 0.61 0.19 264;
+    --chart-2: 0.58 0.16 240;
+    --chart-3: 0.65 0.14 280;
+    --chart-4: 0.70 0.18 200;
+    --chart-5: 0.75 0.15 220;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Custom animations for landing page */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      opacity: 0.5;
+      filter: blur(20px);
+    }
+    50% {
+      opacity: 0.8;
+      filter: blur(30px);
+    }
+  }
+
+  /* Premium "LAUNCHING SOON" animations */
+  @keyframes float-smooth {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+
+  @keyframes glow-pulse-premium {
+    0%, 100% {
+      text-shadow: 
+        0 0 20px rgba(34, 211, 238, 0.3),
+        0 0 40px rgba(34, 211, 238, 0.2),
+        0 0 60px rgba(34, 211, 238, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+      text-shadow: 
+        0 0 30px rgba(34, 211, 238, 0.5),
+        0 0 60px rgba(34, 211, 238, 0.3),
+        0 0 90px rgba(34, 211, 238, 0.2),
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  @keyframes gradient-sweep {
+    0% {
+      background-position: 0% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  @keyframes fade-in-scale {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .launching-soon-text {
+    animation: 
+      float-smooth 5s ease-in-out infinite,
+      glow-pulse-premium 4s ease-in-out infinite,
+      fade-in-scale 1.2s ease-out forwards;
+    
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(34, 211, 238, 1) 25%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(34, 211, 238, 1) 75%,
+      rgba(255, 255, 255, 0.95) 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: 
+      float-smooth 5s ease-in-out infinite,
+      glow-pulse-premium 4s ease-in-out infinite,
+      gradient-sweep 8s linear infinite,
+      fade-in-scale 1.2s ease-out forwards;
+    
+    /* 3D depth with layered shadows */
+    filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.4));
+    
+    /* Subtle perspective tilt */
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out forwards;
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-left 0.8s ease-out forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.8s ease-out forwards;
+  }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    .animate-fade-in-up,
+    .animate-fade-in,
+    .animate-slide-in-left,
+    .animate-slide-in-right,
+    .launching-soon-text {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
