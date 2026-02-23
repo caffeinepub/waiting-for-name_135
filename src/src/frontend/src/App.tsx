@@ -6,11 +6,14 @@ import { ExamTarget } from "./backend.d";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AnimatedGradientCard } from "@/components/ui/animated-gradient-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import HolographicCard from "@/components/ui/holographic-card";
+import { BackgroundBeams } from "@/components/ui/background-beams";
+import { AnimatedText } from "@/components/ui/animated-shiny-text";
+import TextBlockAnimation from "@/components/ui/text-block-animation";
 import { Toaster, toast } from "sonner";
 import {
   Focus,
@@ -94,9 +97,17 @@ function HeroSection() {
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none px-4">
         <div className="max-w-4xl w-full text-center space-y-8">
           <div className="mb-4">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black tracking-[0.25em] uppercase text-center gradient-heading animate-fade-in-up">
-              LAUNCHING SOON 🚀
-            </h2>
+            <TextBlockAnimation
+              blockColor="#22d3ee"
+              animateOnScroll={false}
+              delay={0.3}
+              duration={0.8}
+              stagger={0.05}
+            >
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black tracking-[0.25em] uppercase text-center text-[#f8fafc]">
+                LAUNCHING SOON 🚀
+              </h2>
+            </TextBlockAnimation>
           </div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold gradient-heading tracking-tight font-display leading-tight">
@@ -141,16 +152,24 @@ function HeroSection() {
 // Problem Section
 function ProblemSection() {
   return (
-    <RevealSection id="problem" className="relative py-40 px-4 bg-gradient-to-b from-background to-secondary/30">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none" />
+    <RevealSection id="problem" className="relative py-40 px-4 section-gradient-premium">
+      <BackgroundBeams />
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-6 gradient-heading">
-            Distraction Is Not a Motivation Problem.
-          </h2>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-display mb-8 gradient-heading">
-            It's a System Problem.
-          </h2>
+          <AnimatedText 
+            text="Distraction Is Not a Motivation Problem."
+            gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
+            gradientAnimationDuration={5}
+            hoverEffect={true}
+            textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-6"
+          />
+          <AnimatedText 
+            text="It's a System Problem."
+            gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
+            gradientAnimationDuration={4}
+            hoverEffect={true}
+            textClassName="text-3xl md:text-4xl lg:text-5xl font-bold font-display mb-8"
+          />
           <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
             Every year, lakhs of JEE & NEET aspirants start their preparation with determination. But within weeks, the
             result is lost time, broken consistency, and mental burnout.
@@ -158,142 +177,134 @@ function ProblemSection() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <HolographicCard>
-            <Card className="bg-card/80 border-white/5 backdrop-blur-sm hover:border-white/10 transition-all h-full">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold gradient-heading flex items-start gap-3">
-                  <span className="text-3xl">🌐</span>
-                  <div>
-                    ONLINE DISTRACTIONS
-                    <p className="text-sm font-normal text-muted-foreground mt-1">(Digital Overload Zone)</p>
-                  </div>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-foreground/90 italic">
-                  "I'll just watch YouTube for 10 minutes and then study."
-                </p>
-                <ul className="space-y-3 text-foreground/70">
-                  <li className="flex items-start gap-2">
-                    <span className="text-destructive mt-1">•</span>
-                    Endless Instagram Reels
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-destructive mt-1">•</span>
-                    "Just one more game"
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-destructive mt-1">•</span>
-                    Web series binge sessions
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-destructive mt-1">•</span>
-                    Random chatting
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-destructive mt-1">•</span>
-                    Non-educational YouTube rabbit holes
-                  </li>
-                </ul>
-                <p className="text-foreground font-medium pt-2">
-                  10 minutes quietly turn into 2 hours. Not because you are weak. But because these platforms are
-                  designed to capture and retain your attention.
-                </p>
-              </CardContent>
-            </Card>
-          </HolographicCard>
+          <AnimatedGradientCard variant="premium" glowIntensity="medium">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold gradient-heading flex items-start gap-3">
+                <span className="text-3xl">🌐</span>
+                <div>
+                  ONLINE DISTRACTIONS
+                  <p className="text-sm font-normal text-muted-foreground mt-1">(Digital Overload Zone)</p>
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-foreground/90 italic">
+                "I'll just watch YouTube for 10 minutes and then study."
+              </p>
+              <ul className="space-y-3 text-foreground/70">
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  Endless Instagram Reels
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  "Just one more game"
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  Web series binge sessions
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  Random chatting
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  Non-educational YouTube rabbit holes
+                </li>
+              </ul>
+              <p className="text-foreground font-medium pt-2">
+                10 minutes quietly turn into 2 hours. Not because you are weak. But because these platforms are
+                designed to capture and retain your attention.
+              </p>
+            </CardContent>
+          </AnimatedGradientCard>
 
-          <HolographicCard>
-            <Card className="bg-card/80 border-white/5 backdrop-blur-sm hover:border-white/10 transition-all h-full">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold gradient-heading flex items-start gap-3">
-                  <span className="text-3xl">🏫</span>
-                  <div>
-                    OFFLINE DISTRACTIONS
-                    <p className="text-sm font-normal text-muted-foreground mt-1">(Real-World Focus Killers)</p>
-                  </div>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-foreground/90 italic">
-                  "Even if you delete social media…"
-                </p>
-                <ul className="space-y-3 text-foreground/70">
-                  <li className="flex items-start gap-2">
-                    <span className="text-destructive mt-1">•</span>
-                    Skipping coaching classes
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-destructive mt-1">•</span>
-                    Irregular sleep cycles
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-destructive mt-1">•</span>
-                    Emotional ups and downs in relationships
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-destructive mt-1">•</span>
-                    Casual timepass with friends
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-destructive mt-1">•</span>
-                    No structured daily accountability
-                  </li>
-                </ul>
-                <p className="text-foreground font-medium pt-2">
-                  Offline chaos silently destroys long-term consistency.
-                </p>
-              </CardContent>
-            </Card>
-          </HolographicCard>
+          <AnimatedGradientCard variant="premium" glowIntensity="medium">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold gradient-heading flex items-start gap-3">
+                <span className="text-3xl">🏫</span>
+                <div>
+                  OFFLINE DISTRACTIONS
+                  <p className="text-sm font-normal text-muted-foreground mt-1">(Real-World Focus Killers)</p>
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-foreground/90 italic">
+                "Even if you delete social media…"
+              </p>
+              <ul className="space-y-3 text-foreground/70">
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  Skipping coaching classes
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  Irregular sleep cycles
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  Emotional ups and downs in relationships
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  Casual timepass with friends
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  No structured daily accountability
+                </li>
+              </ul>
+              <p className="text-foreground font-medium pt-2">
+                Offline chaos silently destroys long-term consistency.
+              </p>
+            </CardContent>
+          </AnimatedGradientCard>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <HolographicCard>
-            <Card className="bg-destructive/10 border-destructive/30 backdrop-blur-sm h-full">
-              <CardHeader>
-                <CardTitle className="text-xl font-bold gradient-heading flex items-start gap-3">
-                  <span className="text-2xl">⚠️</span>
-                  The Real Issue
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-foreground/90 mb-4">Students don't lack ambition. They lack:</p>
-                <ul className="space-y-2 text-foreground/70 mb-4">
-                  <li>• Focus protection</li>
-                  <li>• Structured monitoring</li>
-                  <li>• Accountability</li>
-                  <li>• Performance visibility</li>
-                </ul>
-                <p className="gradient-heading-light font-semibold text-lg">
-                  Motivation fades. Structure sustains.
-                </p>
-              </CardContent>
-            </Card>
-          </HolographicCard>
+          <AnimatedGradientCard variant="accent" glowIntensity="high">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold gradient-heading flex items-start gap-3">
+                <span className="text-2xl">⚠️</span>
+                The Real Issue
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-foreground/90 mb-4">Students don't lack ambition. They lack:</p>
+              <ul className="space-y-2 text-foreground/70 mb-4">
+                <li>• Focus protection</li>
+                <li>• Structured monitoring</li>
+                <li>• Accountability</li>
+                <li>• Performance visibility</li>
+              </ul>
+              <p className="gradient-heading-light font-semibold text-lg">
+                Motivation fades. Structure sustains.
+              </p>
+            </CardContent>
+          </AnimatedGradientCard>
 
-          <HolographicCard>
-            <Card className="bg-card/80 border-white/5 backdrop-blur-sm h-full">
-              <CardHeader>
-                <CardTitle className="text-xl font-bold gradient-heading flex items-start gap-3">
-                  <span className="text-2xl">💡</span>
-                  Why Current Solutions Fail
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-foreground/90 mb-4">Most productivity apps:</p>
-                <ul className="space-y-2 text-foreground/70">
-                  <li>• Are generic study timers</li>
-                  <li>• Don't understand competitive exam pressure</li>
-                  <li>• Ignore psychological triggers</li>
-                  <li>• Don't address real-world distractions</li>
-                </ul>
-                <p className="text-foreground font-medium pt-4">
-                  Competitive exam preparation requires a system built specifically for aspirants.
-                </p>
-              </CardContent>
-            </Card>
-          </HolographicCard>
+          <AnimatedGradientCard variant="default" glowIntensity="medium">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold gradient-heading flex items-start gap-3">
+                <span className="text-2xl">💡</span>
+                Why Current Solutions Fail
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-foreground/90 mb-4">Most productivity apps:</p>
+              <ul className="space-y-2 text-foreground/70">
+                <li>• Are generic study timers</li>
+                <li>• Don't understand competitive exam pressure</li>
+                <li>• Ignore psychological triggers</li>
+                <li>• Don't address real-world distractions</li>
+              </ul>
+              <p className="text-foreground font-medium pt-4">
+                Competitive exam preparation requires a system built specifically for aspirants.
+              </p>
+            </CardContent>
+          </AnimatedGradientCard>
         </div>
       </div>
     </RevealSection>
@@ -303,29 +314,43 @@ function ProblemSection() {
 // Why This Platform Exists Section
 function WhySection() {
   return (
-    <RevealSection className="relative py-40 px-4 bg-gradient-to-b from-secondary/30 to-background">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none" />
+    <RevealSection className="relative py-40 px-4 section-gradient-accent">
+      <BackgroundBeams />
       <div className="max-w-4xl mx-auto text-center relative z-10">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-12 gradient-heading">
-          Why This Platform Exists
-        </h2>
+        <AnimatedText 
+          text="Why This Platform Exists"
+          gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
+          gradientAnimationDuration={5}
+          hoverEffect={true}
+          textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-12"
+        />
 
         <div className="space-y-8 text-left text-foreground/80 text-lg md:text-xl leading-relaxed">
           <p>
             We noticed something simple:
           </p>
-          <h3 className="text-xl md:text-2xl font-semibold text-left gradient-heading py-6">
-            Students don't fail because they don't want success. They fail because they don't have a system strong enough to protect their focus.
-          </h3>
+          <AnimatedText 
+            text="Students don't fail because they don't want success. They fail because they don't have a system strong enough to protect their focus."
+            gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
+            gradientAnimationDuration={4}
+            hoverEffect={true}
+            className="py-6"
+            textClassName="text-xl md:text-2xl font-semibold text-left"
+          />
           <p>
             This platform is built to create that system.
           </p>
           <div className="text-center py-8">
             <p className="text-muted-foreground">Not a motivational app.</p>
             <p className="text-muted-foreground">Not just a timer.</p>
-            <h3 className="text-xl md:text-2xl font-bold text-center gradient-heading mt-6">
-              A behavioral control + performance tracking ecosystem designed for serious aspirants.
-            </h3>
+            <AnimatedText 
+              text="A behavioral control + performance tracking ecosystem designed for serious aspirants."
+              gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #22d3ee, #F8FAFC, #9CA3AF)"
+              gradientAnimationDuration={3}
+              hoverEffect={true}
+              className="mt-6"
+              textClassName="text-xl md:text-2xl font-bold text-center"
+            />
           </div>
         </div>
       </div>
@@ -371,46 +396,51 @@ function SolutionSection() {
   ];
 
   return (
-    <RevealSection id="solution" className="relative py-40 px-4 bg-background">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none" />
+    <RevealSection id="solution" className="relative py-40 px-4 section-gradient-default">
+      <BackgroundBeams />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-6 gradient-heading">
-            How We Solve It
-          </h2>
+          <AnimatedText 
+            text="How We Solve It"
+            gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
+            gradientAnimationDuration={5}
+            hoverEffect={true}
+            textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-6"
+          />
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <HolographicCard key={index}>
-                <Card
-                  className="bg-card/80 border-white/5 backdrop-blur-sm hover:border-white/20 hover:bg-card/90 transition-all group h-full"
-                >
-                  <CardHeader>
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 bg-accent/20 rounded-xl group-hover:bg-accent/30 transition-colors">
-                        <Icon className="w-8 h-8 text-accent" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-2xl font-bold gradient-heading mb-2">{feature.title}</CardTitle>
-                        <CardDescription className="text-muted-foreground text-base">{feature.description}</CardDescription>
-                      </div>
+              <AnimatedGradientCard
+                key={index}
+                variant="premium"
+                glowIntensity="high"
+                hoverEffect={true}
+              >
+                <CardHeader>
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-gradient-to-br from-cyan-500/20 via-blue-500/15 to-cyan-500/10 rounded-xl group-hover:from-cyan-500/30 group-hover:via-blue-500/25 group-hover:to-cyan-500/20 transition-all duration-500">
+                      <Icon className="w-8 h-8 text-cyan-400" />
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {feature.bullets.map((bullet, i) => (
-                        <li key={i} className="flex items-start gap-2 text-foreground/70">
-                          <CheckCircle2 className="w-5 h-5 text-accent mt-0.5 shrink-0" />
-                          {bullet}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </HolographicCard>
+                    <div>
+                      <CardTitle className="text-2xl font-bold gradient-heading mb-2">{feature.title}</CardTitle>
+                      <CardDescription className="text-muted-foreground text-base">{feature.description}</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {feature.bullets.map((bullet, i) => (
+                      <li key={i} className="flex items-start gap-2 text-foreground/70">
+                        <CheckCircle2 className="w-5 h-5 text-cyan-400 mt-0.5 shrink-0" />
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </AnimatedGradientCard>
             );
           })}
         </div>
@@ -431,13 +461,17 @@ function FutureVisionSection() {
   ];
 
   return (
-    <RevealSection id="vision" className="relative py-40 px-4 bg-gradient-to-b from-background to-secondary/30">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none" />
+    <RevealSection id="vision" className="relative py-40 px-4 section-gradient-premium">
+      <BackgroundBeams />
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-8 gradient-heading">
-            Future Vision
-          </h2>
+          <AnimatedText 
+            text="Future Vision"
+            gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #22d3ee, #F8FAFC, #9CA3AF)"
+            gradientAnimationDuration={5}
+            hoverEffect={true}
+            textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-8"
+          />
           <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto">
             This is not just an app. It's the foundation of a focused preparation ecosystem.
           </p>
@@ -447,22 +481,27 @@ function FutureVisionSection() {
           {futureFeatures.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <HolographicCard key={index}>
-                <Card
-                  className="bg-card/80 border-white/5 backdrop-blur-sm hover:border-white/20 transition-all text-center p-8 h-full"
-                >
-                  <Icon className="w-12 h-12 text-accent mx-auto mb-4" />
-                  <p className="text-foreground/90 font-medium">{feature.text}</p>
-                </Card>
-              </HolographicCard>
+              <AnimatedGradientCard
+                key={index}
+                variant="accent"
+                glowIntensity="medium"
+                className="text-center p-8"
+              >
+                <Icon className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
+                <p className="text-foreground/90 font-medium">{feature.text}</p>
+              </AnimatedGradientCard>
             );
           })}
         </div>
 
         <div className="text-center">
-          <h2 className="text-xl md:text-2xl font-bold text-center gradient-heading">
-            We aim to build the most serious productivity platform for competitive exam aspirants in India.
-          </h2>
+          <AnimatedText 
+            text="We aim to build the most serious productivity platform for competitive exam aspirants in India."
+            gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
+            gradientAnimationDuration={4}
+            hoverEffect={true}
+            textClassName="text-xl md:text-2xl font-bold text-center"
+          />
         </div>
       </div>
     </RevealSection>
@@ -472,38 +511,35 @@ function FutureVisionSection() {
 // Who Is This For Section
 function WhoIsThisForSection() {
   return (
-    <RevealSection className="relative py-40 px-4 bg-gradient-to-b from-secondary/30 to-background">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none" />
+    <RevealSection className="relative py-40 px-4 section-gradient-accent">
+      <BackgroundBeams />
       <div className="max-w-4xl mx-auto relative z-10">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display text-center gradient-heading mb-16">
-          Who Is This For?
-        </h2>
+        <AnimatedText 
+          text="Who Is This For?"
+          gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
+          gradientAnimationDuration={5}
+          hoverEffect={true}
+          className="mb-16"
+          textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display text-center"
+        />
 
         <div className="grid md:grid-cols-2 gap-6 mb-16">
-          <HolographicCard>
-            <Card className="bg-card/80 border-accent/20 backdrop-blur-sm hover:border-accent/40 transition-all p-8 h-full">
-              <CheckCircle2 className="w-8 h-8 text-accent mb-4" />
-              <p className="text-foreground text-xl font-semibold">JEE Aspirants</p>
-            </Card>
-          </HolographicCard>
-          <HolographicCard>
-            <Card className="bg-card/80 border-accent/20 backdrop-blur-sm hover:border-accent/40 transition-all p-8 h-full">
-              <CheckCircle2 className="w-8 h-8 text-accent mb-4" />
-              <p className="text-foreground text-xl font-semibold">NEET Aspirants</p>
-            </Card>
-          </HolographicCard>
-          <HolographicCard>
-            <Card className="bg-card/80 border-accent/20 backdrop-blur-sm hover:border-accent/40 transition-all p-8 h-full">
-              <CheckCircle2 className="w-8 h-8 text-accent mb-4" />
-              <p className="text-foreground text-xl font-semibold">Students struggling with consistency</p>
-            </Card>
-          </HolographicCard>
-          <HolographicCard>
-            <Card className="bg-card/80 border-accent/20 backdrop-blur-sm hover:border-accent/40 transition-all p-8 h-full">
-              <CheckCircle2 className="w-8 h-8 text-accent mb-4" />
-              <p className="text-foreground text-xl font-semibold">Serious competitors preparing for 1–2 year cycles</p>
-            </Card>
-          </HolographicCard>
+          <AnimatedGradientCard variant="accent" glowIntensity="medium" className="p-8">
+            <CheckCircle2 className="w-8 h-8 text-cyan-400 mb-4" />
+            <p className="text-foreground text-xl font-semibold">JEE Aspirants</p>
+          </AnimatedGradientCard>
+          <AnimatedGradientCard variant="accent" glowIntensity="medium" className="p-8">
+            <CheckCircle2 className="w-8 h-8 text-cyan-400 mb-4" />
+            <p className="text-foreground text-xl font-semibold">NEET Aspirants</p>
+          </AnimatedGradientCard>
+          <AnimatedGradientCard variant="accent" glowIntensity="medium" className="p-8">
+            <CheckCircle2 className="w-8 h-8 text-cyan-400 mb-4" />
+            <p className="text-foreground text-xl font-semibold">Students struggling with consistency</p>
+          </AnimatedGradientCard>
+          <AnimatedGradientCard variant="accent" glowIntensity="medium" className="p-8">
+            <CheckCircle2 className="w-8 h-8 text-cyan-400 mb-4" />
+            <p className="text-foreground text-xl font-semibold">Serious competitors preparing for 1–2 year cycles</p>
+          </AnimatedGradientCard>
         </div>
 
         <div className="text-center bg-destructive/10 border border-destructive/30 rounded-xl p-10">
@@ -521,33 +557,37 @@ function WhoIsThisForSection() {
 // Early Access Section
 function EarlyAccessSection() {
   return (
-    <RevealSection className="relative py-40 px-4 bg-background">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none" />
+    <RevealSection className="relative py-40 px-4 section-gradient-default">
+      <BackgroundBeams />
       <div className="max-w-4xl mx-auto text-center relative z-10">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-8 gradient-heading">
-          Early Access Community
-        </h2>
+        <AnimatedText 
+          text="Early Access Community"
+          gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
+          gradientAnimationDuration={5}
+          hoverEffect={true}
+          textClassName="text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-8"
+        />
         <p className="text-muted-foreground text-lg md:text-xl mb-12">
           We're currently building this with selected early users.
         </p>
 
-        <div className="bg-card/80 border border-white/5 rounded-xl p-10 mb-12">
+        <AnimatedGradientCard variant="premium" glowIntensity="high" className="rounded-xl p-10 mb-12">
           <p className="text-foreground text-xl md:text-2xl mb-8">If you want to:</p>
           <ul className="space-y-4 text-foreground/80 text-left max-w-md mx-auto text-lg">
             <li className="flex items-start gap-3">
-              <CheckCircle2 className="w-6 h-6 text-accent mt-0.5 shrink-0" />
+              <CheckCircle2 className="w-6 h-6 text-cyan-400 mt-0.5 shrink-0" />
               Test early features
             </li>
             <li className="flex items-start gap-3">
-              <CheckCircle2 className="w-6 h-6 text-accent mt-0.5 shrink-0" />
+              <CheckCircle2 className="w-6 h-6 text-cyan-400 mt-0.5 shrink-0" />
               Give direct feedback
             </li>
             <li className="flex items-start gap-3">
-              <CheckCircle2 className="w-6 h-6 text-accent mt-0.5 shrink-0" />
+              <CheckCircle2 className="w-6 h-6 text-cyan-400 mt-0.5 shrink-0" />
               Shape the future of this platform
             </li>
           </ul>
-        </div>
+        </AnimatedGradientCard>
 
         <Button
           size="lg"
@@ -613,20 +653,24 @@ function ReviewFormSection() {
   };
 
   return (
-    <RevealSection id="feedback" className="relative py-40 px-4 bg-gradient-to-b from-background to-secondary/30">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none" />
+    <RevealSection id="feedback" className="relative py-40 px-4 section-gradient-premium">
+      <BackgroundBeams />
       <div className="max-w-3xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-display mb-6 gradient-heading">
-            Tell Us About Your Preparation Struggles
-          </h2>
+          <AnimatedText 
+            text="Tell Us About Your Preparation Struggles"
+            gradientColors="linear-gradient(90deg, #9CA3AF, #F8FAFC, #1F2937, #F8FAFC, #9CA3AF)"
+            gradientAnimationDuration={5}
+            hoverEffect={true}
+            textClassName="text-3xl md:text-4xl lg:text-5xl font-bold font-display mb-6"
+          />
           <p className="text-muted-foreground text-lg md:text-xl">We want real feedback from real aspirants.</p>
           <p className="text-muted-foreground mt-3">
             👉 Your insight helps shape the system.
           </p>
         </div>
 
-        <Card className="bg-card/80 border-white/5 backdrop-blur-sm">
+        <AnimatedGradientCard variant="premium" glowIntensity="medium">
           <CardContent className="pt-8">
             <form onSubmit={handleSubmit} className="space-y-8">
               <div>
@@ -716,7 +760,7 @@ function ReviewFormSection() {
               </Button>
             </form>
           </CardContent>
-        </Card>
+        </AnimatedGradientCard>
       </div>
     </RevealSection>
   );
@@ -725,8 +769,8 @@ function ReviewFormSection() {
 // Closing Section
 function ClosingSection() {
   return (
-    <RevealSection className="relative py-40 px-4 bg-gradient-to-b from-secondary/30 to-background">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none" />
+    <RevealSection className="relative py-40 px-4 section-gradient-accent">
+      <BackgroundBeams />
       <div className="max-w-4xl mx-auto text-center relative z-10">
         <div className="mb-16 space-y-6">
           <p className="text-muted-foreground text-2xl md:text-3xl">Discipline is hard.</p>
@@ -739,9 +783,14 @@ function ClosingSection() {
           you need more than motivation.
         </p>
 
-        <h2 className="text-3xl md:text-5xl font-bold font-display text-center gradient-heading mb-16">
-          You need a system.
-        </h2>
+        <AnimatedText 
+          text="You need a system."
+          gradientColors="linear-gradient(90deg, #9CA3AF, #22d3ee, #F8FAFC, #22d3ee, #9CA3AF)"
+          gradientAnimationDuration={4}
+          hoverEffect={true}
+          className="mb-16"
+          textClassName="text-3xl md:text-5xl font-bold font-display text-center"
+        />
 
         <p className="text-muted-foreground text-xl md:text-2xl mb-16">And we're building it.</p>
 
