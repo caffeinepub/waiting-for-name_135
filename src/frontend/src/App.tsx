@@ -1,7 +1,5 @@
 import { useState, FormEvent } from "react";
 import { ParticleCanvas } from "./components/ParticleCanvas";
-import { useSubmitReview } from "./hooks/useQueries";
-import { ExamTarget } from "./backend.d";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -779,16 +777,16 @@ function EarlyAccessSection() {
 
 // Review Form Section
 function ReviewFormSection() {
-  const { mutate: submitReview, isPending } = useSubmitReview();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    examTarget: "jee" as "jee" | "neet",
+    examTarget: "JEE" as "JEE" | "NEET",
     biggestDistraction: "",
     averageStudyHours: "",
     neededFeature: "",
   });
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!formData.name || !formData.biggestDistraction || !formData.averageStudyHours || !formData.neededFeature) {
@@ -802,31 +800,42 @@ function ReviewFormSection() {
       return;
     }
 
-    submitReview(
-      {
-        name: formData.name,
-        examTarget: formData.examTarget === "jee" ? ExamTarget.jee : ExamTarget.neet,
-        biggestDistraction: formData.biggestDistraction,
-        averageStudyHours: BigInt(hours),
-        neededFeature: formData.neededFeature,
-      },
-      {
-        onSuccess: () => {
-          toast.success("Thank you for your feedback! We'll be in touch soon.");
-          setFormData({
-            name: "",
-            examTarget: "jee",
-            biggestDistraction: "",
-            averageStudyHours: "",
-            neededFeature: "",
-          });
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("https://sheetdb.io/api/v1/14b5l1qkxwohr", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
         },
-        onError: (error) => {
-          toast.error("Failed to submit. Please try again.");
-          console.error("Submit error:", error);
-        },
-      }
-    );
+        body: JSON.stringify({
+          data: [{
+            "Name": formData.name,
+            "Exam Target": formData.examTarget,
+            "Biggest Distraction": formData.biggestDistraction,
+            "Average Study Hours (per day)": formData.averageStudyHours,
+            "What Feature You Need Most": formData.neededFeature
+          }]
+        })
+      });
+
+      await response.json();
+      toast.success("Submitted Successfully!");
+      
+      // Reset form
+      setFormData({
+        name: "",
+        examTarget: "JEE",
+        biggestDistraction: "",
+        averageStudyHours: "",
+        neededFeature: "",
+      });
+    } catch (error) {
+      toast.error("Something went wrong!");
+      console.error("Submit error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -869,17 +878,17 @@ function ReviewFormSection() {
                     <Label className="text-foreground text-sm sm:text-base mb-3 sm:mb-4 block">Exam Target</Label>
                     <RadioGroup
                       value={formData.examTarget}
-                      onValueChange={(value: "jee" | "neet") => setFormData({ ...formData, examTarget: value })}
+                      onValueChange={(value: "JEE" | "NEET") => setFormData({ ...formData, examTarget: value })}
                       className="flex gap-4 sm:gap-6"
                     >
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="jee" id="jee" className="border-white/30 text-accent" />
+                        <RadioGroupItem value="JEE" id="jee" className="border-white/30 text-accent" />
                         <Label htmlFor="jee" className="text-foreground cursor-pointer text-sm sm:text-base">
                           JEE
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="neet" id="neet" className="border-white/30 text-accent" />
+                        <RadioGroupItem value="NEET" id="neet" className="border-white/30 text-accent" />
                         <Label htmlFor="neet" className="text-foreground cursor-pointer text-sm sm:text-base">
                           NEET
                         </Label>
@@ -932,10 +941,10 @@ function ReviewFormSection() {
                   <Button
                     type="submit"
                     size="lg"
-                    disabled={isPending}
+                    disabled={isSubmitting}
                     className="w-full py-5 sm:py-7 bg-accent text-accent-foreground rounded-full font-bold tracking-wide hover:scale-105 hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all text-sm sm:text-base transform-gpu"
                   >
-                    {isPending ? "Submitting..." : "Submit & Join the Focus Movement"}
+                    {isSubmitting ? "Submitting..." : "Submit & Join the Focus Movement"}
                   </Button>
                 </form>
               </CardContent>
