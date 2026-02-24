@@ -18,6 +18,7 @@ import { DrawLineText } from "@/components/ui/draw-line-text";
 import LetterHoverEffect from "@/components/ui/scale-letter";
 import { SocialLinks } from "@/components/ui/social-links";
 import { BGPattern } from "@/components/ui/bg-pattern";
+import { EarlyAccessModal } from "@/components/ui/early-access-modal";
 import { ScrollReveal, ScrollRevealStagger, ScrollRevealStaggerItem } from "@/components/ScrollReveal";
 import { Toaster, toast } from "sonner";
 import {
@@ -34,6 +35,7 @@ import {
   Zap,
   Target,
   TrendingUp,
+  Share2,
 } from "lucide-react";
 
 // Navigation
@@ -124,9 +126,36 @@ function Navigation() {
 
 // Hero Section
 function HeroSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleShareClick = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "OATH - Own Your Time",
+          text: "Join me in taking the OATH.",
+          url: window.location.href,
+        });
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") {
+          console.error("Error sharing:", error);
+        }
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copied. Share it with your friends.");
+      } catch (error) {
+        console.error("Error copying to clipboard:", error);
+        toast.error("Failed to copy link");
+      }
+    }
+  };
+
   return (
     <section className="relative w-full h-screen overflow-hidden">
       <ParticleCanvas />
+      <EarlyAccessModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none px-4 sm:px-6 md:px-8">
         <div className="max-w-4xl w-full text-center space-y-6 sm:space-y-8">
@@ -144,17 +173,17 @@ function HeroSection() {
             </TextBlockAnimation>
           </div>
 
-          <div className="flex flex-col items-center justify-center mb-6 sm:mb-8">
+          <div className="flex flex-col items-center justify-center mb-6 sm:mb-8 max-w-[95vw] mx-auto">
             <DrawLineText
               text="TAKE THE OATH,"
-              fontSize={48}
+              fontSize={36}
               strokeWidth={2}
               color="#F8FAFC"
               oneByOne={true}
               afterFill={true}
-              letterSpacing={2}
-              wordSpacing={20}
-              className="font-black tracking-tight mb-4 md:hidden"
+              letterSpacing={1}
+              wordSpacing={12}
+              className="font-black tracking-tight mb-2 md:hidden"
             />
             <DrawLineText
               text="TAKE THE OATH,"
@@ -180,13 +209,13 @@ function HeroSection() {
             />
             <DrawLineText
               text="OWN YOUR TIME"
-              fontSize={48}
+              fontSize={36}
               strokeWidth={2}
               color="#F8FAFC"
               oneByOne={true}
               afterFill={true}
-              letterSpacing={2}
-              wordSpacing={20}
+              letterSpacing={1}
+              wordSpacing={12}
               className="font-black tracking-tight md:hidden"
             />
             <DrawLineText
@@ -221,6 +250,7 @@ function HeroSection() {
           <div className="pt-6 sm:pt-8 pointer-events-auto flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
+              onClick={() => setIsModalOpen(true)}
               className="px-6 sm:px-8 py-5 sm:py-6 bg-card-foreground text-background rounded-full font-bold tracking-wide hover:scale-105 hover:shadow-[0_0_30px_rgba(229,231,235,0.15)] transition-all text-sm sm:text-base transform-gpu"
             >
               Join Early Access
@@ -228,9 +258,11 @@ function HeroSection() {
             <Button
               size="lg"
               variant="outline"
-              className="px-6 sm:px-8 py-5 sm:py-6 border-2 border-white/20 text-foreground bg-transparent rounded-full font-bold tracking-wide hover:bg-white/5 hover:border-white/30 hover:scale-105 transition-all text-sm sm:text-base transform-gpu"
+              onClick={handleShareClick}
+              className="px-6 sm:px-8 py-5 sm:py-6 border-2 border-white/20 text-foreground bg-transparent rounded-full font-bold tracking-wide hover:bg-white/5 hover:border-white/30 hover:scale-105 transition-all text-sm sm:text-base transform-gpu flex items-center gap-2"
             >
-              Request Beta Invite
+              <Share2 size={18} />
+              Share with Friends
             </Button>
           </div>
         </div>
@@ -689,9 +721,12 @@ function WhoIsThisForSection() {
 
 // Early Access Section
 function EarlyAccessSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <section className="relative py-12 sm:py-16 md:py-20 lg:py-40 px-4 sm:px-6 md:px-8 bg-background overflow-hidden">
       <BackgroundBeams />
+      <EarlyAccessModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className="max-w-4xl mx-auto text-center relative z-10">
         <ScrollReveal>
           <AnimatedText 
@@ -731,6 +766,7 @@ function EarlyAccessSection() {
         <ScrollReveal delay={0.4}>
           <Button
             size="lg"
+            onClick={() => setIsModalOpen(true)}
             className="px-8 sm:px-12 py-5 sm:py-7 bg-accent text-accent-foreground rounded-full font-bold tracking-wide hover:scale-110 hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all text-base sm:text-lg transform-gpu"
           >
             Join the Early Access List
@@ -913,9 +949,12 @@ function ReviewFormSection() {
 
 // Closing Section
 function ClosingSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <section className="relative py-12 sm:py-16 md:py-20 lg:py-40 px-4 sm:px-6 md:px-8 bg-gradient-to-b from-secondary/30 to-background overflow-hidden">
       <BackgroundBeams />
+      <EarlyAccessModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className="max-w-4xl mx-auto text-center relative z-10">
         <ScrollReveal>
           <div className="mb-12 sm:mb-16 space-y-4 sm:space-y-6">
@@ -950,6 +989,7 @@ function ClosingSection() {
         <ScrollReveal delay={0.5}>
           <Button
             size="lg"
+            onClick={() => setIsModalOpen(true)}
             className="px-8 sm:px-12 py-5 sm:py-7 bg-card-foreground text-background rounded-full font-bold tracking-wide hover:scale-110 hover:shadow-[0_0_30px_rgba(229,231,235,0.15)] transition-all text-base sm:text-lg transform-gpu"
           >
             Join Early Access
